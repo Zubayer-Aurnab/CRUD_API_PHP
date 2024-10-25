@@ -8,8 +8,43 @@ function error422($message){
         'message' => $message,
     ];
     header('HTTP/1.0 401 NO cunnectoin with the server');
-    return json_encode($data);
+    echo json_encode($data);
    
+};
+
+
+
+//get single customer data from the database
+function getSingleCustomer($id){
+    global $conn;
+    if(empty($id)){
+
+        return error422('Enter Id');
+    }
+
+    $customerId = mysqli_real_escape_string($conn,$id['id']);
+    $query = "SELECT * FROM customers WHERE id = '$customerId' LIMIT 1 ";
+    $result = mysqli_query($conn,$query);
+
+
+    if(mysqli_num_rows($result) > 0) {
+        $res = mysqli_fetch_assoc($result);
+        $data = [
+            'status' => 200,
+            'message' => 'Data Find Successfully',
+            'data' =>$res
+        ];
+        header('HTTP/1.0 200 Data Find Successfully');
+        return json_encode($data);
+    }else{
+        $data = [
+            'status' => 404,
+            'message' => 'No Customer Found',
+        ];
+        header('HTTP/1.0 401 No Customer Found');
+        return json_encode($data);
+    }
+
 };
 
 // fucntoin for post data to the data-base

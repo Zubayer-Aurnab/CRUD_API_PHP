@@ -10,8 +10,15 @@ $reqMethods = $_SERVER["REQUEST_METHOD"];
 
 if ($reqMethods == 'GET') {
 
-    $customerList = getCustomerList();
-    echo $customerList;
+    if(isset($_GET['id'])){
+        $customer = getSingleCustomer($_GET);
+        echo $customer;
+    }else{
+        $customerList = getCustomerList();
+        echo $customerList;
+    };
+
+  
 
 } else {
     $data = [
