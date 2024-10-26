@@ -171,3 +171,34 @@ function getCustomerList()
         return json_encode($data);
     }
 };
+
+// delete a use from the database
+function deleteCustomer($customerID)
+{
+
+    global $conn;
+    $id = mysqli_real_escape_string($conn, $customerID);
+
+    if (empty($id)) {
+
+        return error422('Enter Id');
+    }
+
+    $query = "DELETE  FROM customers WHERE id='$id' LIMIT 1";
+    $result = mysqli_query($conn, $query);
+    if ($result) {
+        $data = [
+            'status' => 200,
+            'message' => 'Customer Deleted Successfully'
+        ];
+        header('HTTP/1.0 200 Customer Deleted Successfully');
+        return json_encode($data);
+    } else {
+        $data = [
+            'status' => 404,
+            'message' => 'INTERNAL SERVER ERROR'
+        ];
+        header('HTTP/1.0 404 INTERNAL SERVER ERROR');
+        return json_encode($data);
+    }
+};
